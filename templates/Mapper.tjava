@@ -1,0 +1,16 @@
+package {{ package_name }}.mappers;
+
+import {{ package_name }}.entities.{{ entity }};
+import org.mapstruct.*;
+import org.mapstruct.factory.Mappers;
+import org.trips.service_framework.mappers.BaseMapper;
+import org.trips.service_framework.utils.ProtoMapperUtil;
+
+@Mapper(uses = ProtoMapperUtil.class,
+        collectionMappingStrategy = CollectionMappingStrategy.ADDER_PREFERRED,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS,
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface {{ entity }}Mapper extends BaseMapper<{{ entity }}> {
+    {{ entity }}Mapper INSTANCE = Mappers.getMapper({{ entity }}Mapper.class);
+}

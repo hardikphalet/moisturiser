@@ -1,0 +1,16 @@
+package {{ package_name }}.responses;
+
+import {{ package_name }}.entities.{{ entity }};
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
+import org.trips.service_framework.models.responses.BaseResponse;
+
+import java.util.List;
+
+@Data
+@SuperBuilder
+@EqualsAndHashCode(callSuper = false)
+public class {{ entity }}Response extends BaseResponse {
+    private List<{{ entity }}> data;
+}

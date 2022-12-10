@@ -1,0 +1,10 @@
+package {{ package_name }}.repositories;
+
+
+import {{ package_name }}.entities.{{ entity }};
+import org.trips.service_framework.models.repositories.BaseRepository;
+
+import java.util.List;
+
+public interface {{ entity }}Repository extends BaseRepository<{{ entity }}> {
+}

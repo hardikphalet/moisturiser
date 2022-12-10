@@ -1,0 +1,36 @@
+package {{ package_name }}.controllers;
+
+import {{ package_name }}.responses.{{ entity }}Response;
+import {{ package_name }}.services.{{ entity }}Service;
+import {{ package_name }}.entities.{{ entity }};
+
+import java.util.List;
+import org.apache.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.trips.service_framework.controllers.BaseController;
+import org.trips.service_framework.models.responses.StatusResponse;
+
+@RestController
+@RequestMapping("/{{ entity_name_small }}")
+public class {{ entity }}Controller extends BaseController<{{ entity }}Response, {{ entity }}> {
+    public {{ entity }}Controller({{ entity }}Service service) {
+        super(service);
+    }
+
+    @Override
+    public {{ entity }}Service getService() {
+        return ({{ entity }}Service) this.service;
+    }
+
+    @Override
+    protected {{ entity }}Response createResponse(List<{{ entity }}> entryList) {
+        return {{ entity }}Response.builder()
+                .data(entryList)
+                .status(StatusResponse.builder()
+                        .statusCode(HttpStatus.SC_OK)
+                        .statusType(StatusResponse.Type.SUCCESS)
+                        .totalCount(entryList.size())
+                        .build())
+                .build();
+    }
+}
