@@ -1,0 +1,27 @@
+package {{ package_name }}.services;
+
+import {{ package_name }}.mappers.{{ entity }}Mapper;
+import {{ package_name }}.repositories.{{ entity }}Repository;
+import {{ package_name }}.entities.{{ entity }};
+
+import org.springframework.stereotype.Service;
+import org.trips.service_framework.services.BaseService;
+
+
+@Service
+public class {{ entity }}Service extends BaseService<{{ entity }}> {
+
+    public {{ entity }}Service({{ entity }}Repository repository) {
+        super(repository, {{ entity }}.class);
+    }
+
+    @Override
+    protected {{ entity }} merge({{ entity }} src, {{ entity }} target) {
+        return {{ entity }}Mapper.INSTANCE.merge(src, target);
+    }
+
+    @Override
+    public {{ entity }}Repository getRepository() {
+        return ({{ entity }}Repository) this.repository;
+    }
+}

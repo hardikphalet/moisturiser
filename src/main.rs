@@ -14,11 +14,13 @@ fn main() {
         .parse(source.as_str())
         .unwrap();
     let globals: liquid::Object = liquid::object!({
-        "entity" : "Lot"
+        "entity" : "Lot",
+        "package_name": "com.captainfresh.factoryservice",
+        "entity_name_small": "lot"
     });
 
     let modified_content: String = template.render(&globals).unwrap();
 
-    let mut file: fs::File = fs::File::create("Lot.java").expect("Cannot create file");
+    let mut file: fs::File = fs::File::create("LotController.java").expect("Cannot create file");
     file.write_all(modified_content.clone().as_bytes()).expect("msg");
 }
