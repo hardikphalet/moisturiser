@@ -80,6 +80,5 @@ pub fn find_package_name(file: &Path) -> Result<String, std::io::Error> {
         }
     }
     package_name.truncate(package_name.len() - 9); // removing the '.entities'
-    println!("calculated package name is: {}", &package_name);
     Ok(package_name)
 }

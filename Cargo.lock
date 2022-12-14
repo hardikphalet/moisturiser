@@ -188,7 +188,6 @@ name = "moisturiser"
 version = "0.1.0"
 dependencies = [
  "liquid",
- "regex",
 ]
 
 [[package]]
