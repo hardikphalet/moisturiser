@@ -1,26 +1,5 @@
-use liquid::ParserBuilder;
-use std::env;
-use std::fs;
-use std::io::Write;
+mod moist;
 
 fn main() {
-    let args: Vec<String> = env::args().collect();  //TODO validate argument
-
-    let source: String = fs::read_to_string(&args[1]).expect("unable to read the file");
-
-    let template: liquid::Template = ParserBuilder::with_stdlib()
-        .build()
-        .unwrap()
-        .parse(source.as_str())
-        .unwrap();
-    let globals: liquid::Object = liquid::object!({
-        "entity" : "Lot",
-        "package_name": "com.captainfresh.factoryservice",
-        "entity_name_small": "lot"
-    });
-
-    let modified_content: String = template.render(&globals).unwrap();
-
-    let mut file: fs::File = fs::File::create("LotController.java").expect("Cannot create file");
-    file.write_all(modified_content.clone().as_bytes()).expect("msg");
+    moist::application::init();
 }
