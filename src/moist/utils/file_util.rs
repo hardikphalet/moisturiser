@@ -1,9 +1,8 @@
 use std::{fs, io};
 use std::io::{BufReader, BufRead};
 use std::path::Path;
-const ENTITY_IDENTIFIER: &'static str = "extends BaseEntity";
-const TEMPLATE_EXTENSION: &'static str = "tjava";
 
+use crate::moist::application::ApplicationContext;
 
 fn find_files(dir: &Path) -> Result<Vec<String>, std::io::Error> {
     let mut files: Vec<String> = vec![];
@@ -24,25 +23,29 @@ fn find_files(dir: &Path) -> Result<Vec<String>, std::io::Error> {
     Ok(files)
 }
 
-fn is_file_entity(file: &str) -> bool {
+fn is_file_entity(file: &str, context: &ApplicationContext) -> bool {
+    println!("file path for entity check: {}", file);
+    if file.ends_with(".DS_Store") {
+        return false;
+    }
     let file: fs::File = fs::File::open(file).expect("Failed to open file");
     let reader = BufReader::new(file);
 
     for line in reader.lines() {
         let line = line.expect("Failed to read line");
-        if line.contains(ENTITY_IDENTIFIER) {
+        if line.contains(context.entity_identifier.as_str()) {
             return true;
         }
     }
     false
 }
 
-pub fn find_entity_files(dir: &Path) -> Result<Vec<String>, std::io::Error> {
+pub fn find_entity_files(dir: &Path, context: &ApplicationContext) -> Result<Vec<String>, std::io::Error> {
     let files: Vec<String> = find_files(dir)?;
     let mut entity_files: Vec<String> = vec![];
 
     for file in files {
-        if is_file_entity(&file) {
+        if is_file_entity(&file, context) {
             entity_files.push(file.to_string());
         }
     }
@@ -50,14 +53,14 @@ pub fn find_entity_files(dir: &Path) -> Result<Vec<String>, std::io::Error> {
     Ok(entity_files)
 }
 
-pub fn find_template_files(dir: &Path) -> Result<Vec<String>, std::io::Error> {
+pub fn find_template_files(dir: &Path, context: &ApplicationContext) -> Result<Vec<String>, std::io::Error> {
     let mut files = Vec::new();
 
     for entry in fs::read_dir(dir).unwrap() {
         let entry = entry.unwrap();
         let path = entry.path();
         if let Some(ext) = path.extension() {
-            if ext == TEMPLATE_EXTENSION {
+            if ext == context.template_extension.as_str() {
                 files.push(String::from(path.to_str().unwrap()));
             }
         }

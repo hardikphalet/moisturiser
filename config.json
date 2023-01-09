@@ -1,0 +1,14 @@
+{
+    "version": "1.0",
+    "author": "Hardik Phalet",
+    "template_to_package": {
+        "Controller": "controllers",
+        "Repository": "respositories",
+        "Mapper": "mappers",
+        "Response": "responses",
+        "Service": "services"
+    },
+    "template_directory": "/Users/hardikphalet/dev_personal/rust/moisturiser/moisturiser/templates",
+    "entity_identifier": "extends BaseEntity",
+    "template_extension": "tjava"
+}
