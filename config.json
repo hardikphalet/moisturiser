@@ -8,7 +8,7 @@
         "Response": "responses",
         "Service": "services"
     },
-    "template_directory": "/Users/hardikphalet/dev_personal/rust/moisturiser/moisturiser/templates",
+    "template_directory" "${TEMPLATE}":
     "entity_identifier": "extends BaseEntity",
     "template_extension": "tjava"
 }
