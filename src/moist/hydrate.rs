@@ -1,33 +1,29 @@
-use std::io::Write;
+use std::{io::Write, env};
 use std::path::Path;
 use crate::moist::utils;
-use liquid::{ParserBuilder};
+use liquid::{ParserBuilder, ValueView};
+use crate::moist::application::ApplicationContext;
 
-const TEMPLATE_DIRECTORY: &'static str = "/Users/hardikphalet/dev_personal/rust/moisturiser/moisturiser/templates";
-
-pub fn hydrate(dir_path: &Path) {
-    let entity_files: Vec<String> = utils::file_util::find_entity_files(dir_path)
+pub fn hydrate(dir_path: &Path, context: &ApplicationContext) {
+    env::set_current_dir(dir_path).expect("Failed to set current directory");
+    let entity_files: Vec<String> = utils::file_util::find_entity_files(dir_path, context)
         .expect("Cannot find entity files");
     println!("Entity files found are:");
     for entity in &entity_files {
         println!("Entity:: {}", entity);
     }
 
-    let templates: Vec<String> = fetch_templates().expect("Cannot find template files");
+    let templates: Vec<String> = fetch_templates(context).expect("Cannot find template files");
     println!("Templates files found are:");
     for template in &templates {
         println!("Template:: {}", template);
     }
 
-    // now for every entity retrieve variables (entity, package_name)
     let mut rendering_globals: Vec<liquid::Object> = vec![];
     for entity in &entity_files {
         rendering_globals.push(utils::liquid_util::retrieve_globals_from_entity(Path::new(entity)).unwrap());
     }
 
-    // TODO optimise this
-    // low level strategy
-    let mut count = 0;
     for globals in rendering_globals {
         for template in &templates {
             let template_source = std::fs::read_to_string(template)
@@ -38,18 +34,38 @@ pub fn hydrate(dir_path: &Path) {
                 .parse(template_source.as_str())
                 .unwrap();
             let modified_content: String = curr_template.render(&globals).unwrap();
-            let mut file: std::fs::File = std::fs::File::create(Path::new(((String::from(String::from("rendered_file_") + count.to_string().as_str())) + ".java").as_str())).expect("Cannot create the target file");
-            file.write_all(modified_content.clone().as_bytes()).expect("Cannot write to the created file");
-            count = count + 1;
+            let template_stem =  String::from(Path::new(template).file_stem().unwrap().to_str().unwrap());
+
+            println!("Template Stem: {}", template_stem);
+            let package_folder_name = context.template_to_package.get(&template_stem).expect("No such entity exists in the map").to_string();
+            let mut save_path:String= String::from("../");
+            save_path.push_str(package_folder_name.as_str());
+            save_path.push_str("/");
+            save_path.push_str(globals.get( "entity").as_scalar().to_kstr().as_str());
+            save_path.push_str(Path::new(&template).file_stem().unwrap().to_str().unwrap());
+            save_path.push_str(".java");
+
+            if !Path::new(save_path.as_str()).parent().unwrap().exists() {
+                std::fs::create_dir_all(Path::new(save_path.as_str()).parent().unwrap()).unwrap();
+            }
+            println!("{}", save_path);
+            let file: Result<std::fs::File, std::io::Error> = std::fs::OpenOptions::new().write(true)
+                                                                        .create_new(true)
+                                                                        .open(save_path);
+            match file {
+                Ok(mut file) => {
+                    file.write_all(modified_content.as_bytes()).expect("Cannot write to the created file");
+                },
+                Err(_) => {println!("File created already")},
+            }
+            
         }
     }
-    // for every set of entity variables render files for all templates
 }
 
-fn fetch_templates() -> Result<Vec<String>, std::io::Error> {
-    // [TODO] figure a way to find templates maybe saving a global variable
+fn fetch_templates(context: &ApplicationContext) -> Result<Vec<String>, std::io::Error> {
     Ok(
-        utils::file_util::find_template_files(Path::new(TEMPLATE_DIRECTORY))
+        utils::file_util::find_template_files(Path::new(context.template_directory.as_str()), context)
             .expect("Cannot fetch templates")
     )
 }
