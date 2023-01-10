@@ -1,7 +1,15 @@
 [package]
 name = "moisturiser"
 version = "0.1.0"
+authors = ["Hardik Phalet <hardik.phalet@gmail.com>"]
 edition = "2021"
+license = "Apache-2.0"
+description = "CLI tool for creating files for service-framework"
+readme = "README.md"
+homepage = "https://github.com/hardikphalet/moisturiser"
+repository = "https://github.com/hardikphalet/moisturiser"
+keywords = ["cli", "web", "service-framework", "java"]
+categories = ["command-line-utilities"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
