@@ -32,7 +32,7 @@ fn parse(args: &Vec<String>, context: &ApplicationContext) {
 }
 
 fn load_config() -> ApplicationContext {
-    let config_file: &str = option_env!("moist_config").expect("$moist_config variable not set");
+    let config_file: String = env::var("moist_config").expect("$moist_config variable not set");
     println!("Moist Config location: {}", config_file);
     let contents = fs::read_to_string(config_file).expect("Config file can not be read.");
     println!("Content of config files are:\n{contents}");
