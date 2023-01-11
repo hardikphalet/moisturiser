@@ -24,7 +24,7 @@ then
 fi
 
 # downloading the binary
-(cd $HOME/.moisture && curl -LO https://github.com/hardikphalet/moisturiser/releases/download/alpha-0.1/moisturiser && chmod +x moisturiser)
+(cd $HOME/.moisture && curl -LO https://github.com/hardikphalet/moisturiser/releases/download/alpha-0.2/moisturiser && chmod +x moisturiser)
 
 # downloading templates
 ( cd $HOME/.moisture/templates && curl -O https://raw.githubusercontent.com/hardikphalet/moisturiser/master/templates/Controller.tjava )
