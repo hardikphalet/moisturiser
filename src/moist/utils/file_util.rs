@@ -1,3 +1,5 @@
+// Copyright 2023 Hardik Phalet
+
 use std::{fs, io};
 use std::io::{BufReader, BufRead};
 use std::path::Path;

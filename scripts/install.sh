@@ -1,3 +1,4 @@
+# Copyright 2023 Hardik Phalet
 echo "Moisturiser 0.1.0"
 
 # making directory for our installation

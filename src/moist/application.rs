@@ -1,3 +1,5 @@
+// Copyright 2023 Hardik Phalet
+
 use std::path::Path;
 use std::{env, fs};
 use crate::moist::hydrate::hydrate;

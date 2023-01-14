@@ -1,3 +1,5 @@
+// Copyright 2023 Hardik Phalet
+
 use std::{io::Write, env};
 use std::path::Path;
 use crate::moist::utils;
