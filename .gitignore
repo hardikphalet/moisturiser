@@ -2,3 +2,4 @@
 *.java
 /test
 .DS_Store
+/.idea
