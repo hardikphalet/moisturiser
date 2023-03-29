@@ -11,7 +11,8 @@ pub struct ApplicationContext {
     pub template_extension: String,
     pub template_to_package: std::collections::HashMap<String, String>,
     pub author: String,
-    pub version: String
+    pub version: String,
+    pub language: String
 }
 
 pub fn init() {

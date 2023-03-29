@@ -71,7 +71,15 @@ pub fn find_template_files(dir: &Path, context: &ApplicationContext) -> Result<V
     Ok(files)
 }
 
-pub fn find_package_name(file: &Path) -> Result<String, std::io::Error> {
+pub fn find_package_name(language: &String, file: &Path) -> Result<String, std::io::Error> {
+    if language == "java" {
+        return get_java_package_name(file);
+    }
+
+    return get_golang_module_name();
+}
+
+pub fn get_java_package_name(file: &Path) -> Result<String, std::io::Error> {
     let file = fs::File::open(file)?;
     let reader = io::BufReader::new(file);
 
@@ -86,4 +94,24 @@ pub fn find_package_name(file: &Path) -> Result<String, std::io::Error> {
     }
     package_name.truncate(package_name.len() - 9); // removing the '.entities'
     Ok(package_name)
+}
+
+pub fn get_golang_module_name() -> Result<String, std::io::Error> {
+    let current_dir = std::env::current_dir().unwrap().to_str().unwrap().to_owned();
+    println!("Path for Go Lang module name function: {}", current_dir);
+    let file = fs::File::open(current_dir + "/go.mod")?;
+    let reader = io:: BufReader::new(file);
+
+    let mut module_name: String = String::from("");
+    for line in reader
+        .lines()
+        .skip_while(|line| !line.as_ref().unwrap().starts_with("module ")) {
+        let line = line?;
+        if line.starts_with("module ") {
+            module_name = line[7..line.len()].to_string()
+        }
+    }
+
+    println!("{}", module_name);
+    Ok(module_name)
 }
